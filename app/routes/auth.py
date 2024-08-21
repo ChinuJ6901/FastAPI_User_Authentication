@@ -1,16 +1,13 @@
+# app/routes/auth.py
 from fastapi import APIRouter, HTTPException
-from ..schemas import UserAuth
-from ..crude import check_user_credentials
-from ..database import get_db_connection
+from app.schemas import UserAuth
+from app.crude import check_user_credentials
 
 router = APIRouter()
 
-
 @router.post("/auth")
-def authenticate_user(username: str, password: str):
-    conn = get_db_connection()
-    if conn is None:
-        raise HTTPException(status_code=500, detail="Database connection failed")
-
-    # Simulate a quick response for testing
-    return {"message": "Request received. Database connection succeeded."}
+def authenticate_user(user_auth: UserAuth):
+    if check_user_credentials(user_auth.username, user_auth.password):
+        return {"message": "Authentication successful"}
+    else:
+        raise HTTPException(status_code=401, detail="Invalid credentials")

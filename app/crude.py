@@ -1,16 +1,17 @@
-from .database import get_db_connection
+# app/crud.py
+from app.database import get_db_connection
 
 
-def check_user_credentials(username: str, password: str) -> bool:
+def check_user_credentials(username: str, password: str):
     conn = get_db_connection()
-    cursor = conn.cursor()
+    if conn is None:
+        return None
 
-    query = """
-    SELECT COUNT(*) FROM users
-    WHERE username = %s AND password = %s
-    """
-    cursor.execute(query, (username, password))
-    result = cursor.fetchone()
-
-    conn.close()
-    return result[0] > 0
+    try:
+        cursor = conn.cursor()
+        query = "SELECT * FROM users WHERE username = %s AND password = %s"
+        cursor.execute(query, (username, password))
+        result = cursor.fetchone()
+        return result is not None
+    finally:
+        conn.close()

@@ -1,17 +1,19 @@
+# app/config.py
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from pydantic_settings import BaseSettings
 
 
-class Settings:
-    SNOWFLAKE_USER = os.getenv("SNOWFLAKE_USER")
-    SNOWFLAKE_PASSWORD = os.getenv("SNOWFLAKE_PASSWORD")
-    SNOWFLAKE_ACCOUNT = os.getenv("SNOWFLAKE_ACCOUNT")
-    SNOWFLAKE_WAREHOUSE = os.getenv("SNOWFLAKE_WAREHOUSE")
-    SNOWFLAKE_DATABASE = os.getenv("SNOWFLAKE_DATABASE")
-    SNOWFLAKE_SCHEMA = os.getenv("SNOWFLAKE_SCHEMA")
-    SNOWFLAKE_ROLE = os.getenv("SNOWFLAKE_ROLE")
+class Settings(BaseSettings):
+    SNOWFLAKE_USER: str
+    SNOWFLAKE_PASSWORD: str
+    SNOWFLAKE_ACCOUNT: str
+    SNOWFLAKE_WAREHOUSE: str
+    SNOWFLAKE_DATABASE: str
+    SNOWFLAKE_SCHEMA: str
+    SNOWFLAKE_ROLE: str
+
+    class Config:
+        env_file = ".env"
 
 
 settings = Settings()
